@@ -12,13 +12,13 @@ function TodoForm({ addTodo }) {
     setValue("");
   };
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit} style={{ marginLeft: 15 }}>
       <input
         type="text"
         className="input"
         value={value}
         onChange={(e) => setValue(e.target.value)}
-      />
+      />{" "}
       <button>ADD</button>
     </form>
   );

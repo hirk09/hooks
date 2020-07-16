@@ -1,51 +1,71 @@
 import React, { useState } from "react";
 import TodoForm from "./TodoForm";
 import Todo from "./components/Todo";
-import Checked from "./components/Checked";
 import Filter from "./components/Filter";
+import "./App.css";
 
 function App() {
-  const [todos, setTodos] = useState({
-    filter:"",
-    todos:[
-    { text: "Rice",checked: true},
-    { text: "Oil", checked: true},
-    { text: "Beans",checked: true},
-  ]});
+  const [state, setState] = useState({
+    filter: "",
+    todos: [
+      { text: "Rice", checked: false },
+      { text: "Oil", checked: false },
+      { text: "Beans", checked: false },
+    ],
+  });
   const addTodo = (text) => {
-    const newtodos = {...todos,todos:[...todos.todos, { text }] };
-    setTodos(newtodos);
+    const newstate = { ...state, todos: [...state.todos, { text }] };
+    setState(newstate);
   };
   const changervalue = (e, index) => {
-    const newtodos = {...todos};
-    newtodos[index].text = e.target.value;
-    setTodos(newtodos);
+    const newstate = [...state.todos];
+    newstate[index].text = e.target.value;
+    setState({ ...state, state: newstate });
   };
   const deleteTodo = (index) => {
-    const newtodos = {...todos};
-
-    newtodos.splice(index, 1);
-    setTodos(newtodos);
+    const newstate = [...state.todos];
+    newstate.splice(index, 1);
+    setState({ ...state, todos: newstate });
   };
- console.log(todos)
+  const completeTodo = (index) => {
+    const newstate = [...state.todos];
+    newstate[index].checked = !newstate[index].checked;
+    setState({ ...state, state: newstate });
+  };
   return (
-    <div className="app">
-      <div className="todo-list">
+    <div class=" hello">
+      <div>
+        <h3>TODO APP</h3>
         <TodoForm addTodo={addTodo} />
-        <Filter onClick={(text)=>{setTodos({...todos,filter:text})}} />
-        {todos.todos.map((todo, index) => (
-          <>
-            {" "}
-            <Checked />
-            <Todo
-              key={index}
-              index={index}
-              todo={todo}
-              changervalue={changervalue}
-              deleteTodo={deleteTodo}
-            />
-          </>
-        ))}
+        <br />
+        <Filter
+          onClick={(text) => {
+            setState({ ...state, filter: text });
+          }}
+        />
+        <br />
+        {state.todos
+          .filter((data) =>
+            state.filter === "completed"
+              ? data.checked
+              : state.filter === "incompleted"
+              ? !data.checked
+              : data
+          )
+          .map((todo, index) => (
+            <>
+              {" "}
+              <Todo
+                key={index}
+                index={index}
+                todo={todo}
+                completeTodo={completeTodo}
+                changervalue={changervalue}
+                deleteTodo={deleteTodo}
+              />
+              <br />
+            </>
+          ))}
       </div>
     </div>
   );
